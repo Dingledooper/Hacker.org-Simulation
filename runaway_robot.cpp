@@ -36,6 +36,7 @@ void solve()
         {
             if (is_valid_path(j, i))
             {
+                printf("http://www.hacker.org/runaway/index.php?path=");
                 for (int k = i - 1; k >= 0; k--) putchar(is_bit_set(j, k) ? 'R' : 'D');
                 return;
             }
@@ -59,15 +60,6 @@ int main()
         {
             grid[i][j] = terrain[i * boardX + j] == 'X';
         }
-    }
-    
-    for (int i = 0; i < boardX; i++)
-    {
-        for (int j = 0; j < boardY; j++)
-        {
-            cout << grid[i][j];
-        }
-        cout << '\n';
     }
     solve();
 }
