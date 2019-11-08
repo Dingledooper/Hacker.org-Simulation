@@ -6,26 +6,8 @@
 
 using namespace std;
 
-const int SZ = 17, LEFT = 6, RIGHT = 10;
-bool grid[SZ][SZ] = 
-{
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-};
+bool grid[500][500];
+int boardX, boardY, insMin, insMax;
 
 bool is_valid_path(int n, int len)
 {
@@ -40,7 +22,7 @@ bool is_valid_path(int n, int len)
             if (c == 'R') ++x;
             else          ++y;
 
-            if (x == SZ - 1 || y == SZ - 1) return true;
+            if (x == boardX || y == boardY) return true;
             if (grid[y][x]) return false;
         }
     }
@@ -48,7 +30,7 @@ bool is_valid_path(int n, int len)
 
 void solve()
 {
-    for (int i = LEFT; i <= RIGHT; i++)
+    for (int i = insMin; i <= insMax; i++)
     {
         for (int j = 0; j <= (1 << i) - 1; j++)
         {
@@ -63,5 +45,29 @@ void solve()
 
 int main()
 {
+    string terrain;
+    cin >> terrain;
+    
+    insMax = stoi(terrain.substr(terrain.find("&FVinsMax=") + 10, terrain.find("&FVinsMin=") - terrain.find("&FVinsMax=") - 10));
+    insMin = stoi(terrain.substr(terrain.find("&FVinsMin=") + 10, terrain.find("&FVboardX=") - terrain.find("&FVinsMin=") - 10));
+    boardX = stoi(terrain.substr(terrain.find("&FVboardX=") + 10, terrain.find("&FVboardY=") - terrain.find("&FVboardX=") - 10));
+    boardY = stoi(terrain.substr(terrain.find("&FVboardY=") + 10, terrain.find("&FVlevel=") - terrain.find("&FVboardY=") - 10));
+    
+    for (int i = 0; i < boardX; i++)
+    {
+        for (int j = 0; j < boardY; j++)
+        {
+            grid[i][j] = terrain[i * boardX + j] == 'X';
+        }
+    }
+    
+    for (int i = 0; i < boardX; i++)
+    {
+        for (int j = 0; j < boardY; j++)
+        {
+            cout << grid[i][j];
+        }
+        cout << '\n';
+    }
     solve();
 }
